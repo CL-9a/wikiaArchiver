@@ -11,6 +11,16 @@ todo:
 - xml to git repo
 - xml merger (just bunch up all the <page> entries)
 - static site generator from xml?
+- proper htmlEntities convertion
+```
+echo '&amp;&rsquo;¥' | recode html..ascii
+#=>&recode: Untranslatable input in step `ISO-10646-UCS-2..ANSI_X3.4-1968'
+echo '&amp;&rsquo;¥' | recode html
+#=>&’Â¥
+echo '&amp;&rsquo;¥' | perl -MHTML::Entities -pe 'decode_entities($_);'
+#Wide character in print at -e line 1, <> line 1.
+#&’Â¥
+```
 
 
 Special:SpecialPages

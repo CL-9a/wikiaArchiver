@@ -21,7 +21,6 @@ IFS=$'\n'; for pagetitle in $pages; do
 		echo "downloading xml for $pagetitle into ./$folder/$filename"
 
 		getCurrentXmlForPage $basepath $pagetitle > "./$folder/$filename"
-		#todo: &rsquo;
 		sleep 3
 	fi
 done

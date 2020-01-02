@@ -15,5 +15,4 @@ getCurrentXmlForPage() {
 	local xmlUrl="$wikilink/wiki/Special:Export/$urlEncoded"
 
 	curl --silent --location "$xmlUrl" | perl -MHTML::Entities -pe 'decode_entities($_);'
-	#todo: &rsquo;
 }
