@@ -12,6 +12,7 @@ if [[ ! -z "$wikilanguage" ]]; then
 	wikilink="$wikilink/$wikilanguage"
 fi
 
+#todo handle language
 folder="./xmlwikiscurrent/$wikiname"
 
 source ./functions.sh
@@ -23,7 +24,6 @@ cd $folder
 echo "fetching pages"
 pages="$(getAllPages "$wikilink")"
 echo "got $(wc -l <<< "$pages") pages:"
-#echo "$pages"
 
 IFS=$'\n'; for pagetitle in $pages; do
 	if [[ -z $pagetitle ]]; then
@@ -31,11 +31,10 @@ IFS=$'\n'; for pagetitle in $pages; do
 	else
 		urlEncoded="$(encodeURL $pagetitle)"
 		filename="$urlEncoded.xml"
-		xmlUrl="$wikilink/wiki/Special:Export/$urlEncoded"
 
-		echo "downloading xml for $pagetitle ($xmlUrl) into $filename"
+		echo "downloading xml for $pagetitle into $filename"
 
-		curl --silent --location "$xmlUrl" | perl -MHTML::Entities -pe 'decode_entities($_);' > "./$filename"
+		getCurrentXmlForPage $wikilink $pagetitle > "./$filename"
 		#todo: &rsquo;
 		sleep 3
 	fi

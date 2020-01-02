@@ -22,17 +22,14 @@ cd $folder
 echo "fetching pages"
 pages="$(getAllPages "$wikilink")"
 echo "got $(wc -l <<< "$pages") pages:"
-echo "$pages"
 
 for pagelink in $pages; do
 	pagename="$(basename $pagelink)"
 	cleanpagename="$(decodeURL $pagename)"
 
-	xmlUrl="$wikilink/wiki/Special:Export/$pagename"
-
 	echo "downloading xml for $cleanpagename ($pagename)"
 
-	curl --silent --location "$xmlUrl" | perl -MHTML::Entities -pe 'decode_entities($_);' > "$cleanpagename.xml"
+	getCurrentXmlForPage $wikilink $pagename > "./$cleanpagename.xml"
 
 	sleep 5
 done
