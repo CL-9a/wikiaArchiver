@@ -1,30 +1,19 @@
 #!/bin/bash
-
 ## export an entire wikia / fandom.com's wiki into a git repository.
 ## TODO: script to update repo from the Special:RecentChanges page
 ## Don't use: getPageWikitextSource doesn't handle wikia's wysiwyg editor
 ## TODO: script to convert from archiveXmlFull.sh's dump to git repo
 
-wikiname="$1"
-wikilanguage="$2"
-wikilink="https://$wikiname.fandom.com"
-
-if [[ ! -z "$wikilanguage" ]]; then
-	wikilink="$wikilink/$wikilanguage"
-fi
-
-folder="./gitwikis/$wikiname"
-
-source ./functions.sh
+archiveType="scrapper_gitRepo"
+source ./init.sh
 source ./functions_scrapper.sh
 
-mkdir --parents --verbose $folder
 cd $folder
-touch "storedIds.txt"
+touch "./storedIds.txt"
 git init .
 
 echo "fetching pages"
-pages="$(getAllPages "$wikilink")"
+pages="$(getAllPages "$basepath")"
 echo "got $(wc -l <<< "$pages") pages:"
 
 for pagelink in $pages; do
@@ -32,7 +21,7 @@ for pagelink in $pages; do
 	pagename="$(decodeURL $pagename)"
 
 	echo "getting old versions for page $pagelink"
-	jsondata="$(getPageHistoryData $wikilink $pagelink)"
+	jsondata="$(getPageHistoryData $basepath $pagelink)"
 	nbelems="$(echo $jsondata | jq '. | length')"
 	echo "old ids fetched: $nbelems"
 	echo ""
@@ -57,7 +46,7 @@ for pagelink in $pages; do
 			echo "getting source for page $pagename with id $id"
 			#echo "id:$id date:$date author:$author size:$size comment:$comment"
 
-			getPageWikitextSource "$wikilink" "$pagelink" "$id" > "${pagename}.md"
+			getPageWikitextSource "$basepath" "$pagelink" "$id" > "${pagename}.md"
 
 			git add "${pagename}.md"
 			git -c user.name="$author" -c user.email="anon@ymous.com" commit	\

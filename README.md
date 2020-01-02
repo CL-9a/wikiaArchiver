@@ -8,7 +8,6 @@ tl;dr use `sh archiveXmlCurrent.sh community`
 
 
 todo:
-- common script for the common init
 - xml to git repo
 - xml merger (just bunch up all the <page> entries)
 - static site generator from xml?

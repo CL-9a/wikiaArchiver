@@ -1,26 +1,15 @@
 #!/bin/bash
-
 ## download all the pages of a wikia / fandom.com's wiki in xml format.
 ## TODO: script to update archive from the Special:RecentChanges page
 
-wikiname="$1"
-wikilanguage="$2"
-wikilink="https://$wikiname.fandom.com"
-
-if [[ ! -z "$wikilanguage" ]]; then
-	wikilink="$wikilink/$wikilanguage"
-fi
-
-folder="./xmlwikiscurrent/$wikiname"
-
-source ./functions.sh
+archiveType="scrapper_xmlCurrent"
+source ./init.sh
 source ./functions_scrapper.sh
 
-mkdir --parents --verbose $folder
 cd $folder
 
 echo "fetching pages"
-pages="$(getAllPages "$wikilink")"
+pages="$(getAllPages "$basepath")"
 echo "got $(wc -l <<< "$pages") pages:"
 
 for pagelink in $pages; do
@@ -29,7 +18,7 @@ for pagelink in $pages; do
 
 	echo "downloading xml for $cleanpagename ($pagename)"
 
-	getCurrentXmlForPage $wikilink $pagename > "./$cleanpagename.xml"
+	getCurrentXmlForPage $basepath $pagename > "./$cleanpagename.xml"
 
 	sleep 5
 done
