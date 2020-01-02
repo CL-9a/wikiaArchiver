@@ -16,6 +16,7 @@ fi
 folder="./gitwikis/$wikiname"
 
 source ./functions.sh
+source ./functions_scrapper.sh
 
 mkdir --parents --verbose $folder
 cd $folder
